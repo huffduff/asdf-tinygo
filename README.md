@@ -27,7 +27,7 @@ Plugin:
 ```shell
 asdf plugin add tinygo
 # or
-asdf plugin add tinygo https://github.com/tommyo/asdf-tinygo.git
+asdf plugin add tinygo https://github.com/huffduff/asdf-tinygo.git
 ```
 
 tinygo:
@@ -53,8 +53,8 @@ install & manage versions.
 
 Contributions of any kind welcome! See the [contributing guide](contributing.md).
 
-[Thanks goes to these contributors](https://github.com/tommyo/asdf-tinygo/graphs/contributors)!
+[Thanks goes to these contributors](https://github.com/huffduff/asdf-tinygo/graphs/contributors)!
 
 # License
 
-See [LICENSE](LICENSE) © [Tom O'Reilly](https://github.com/tommyo/)
+See [LICENSE](LICENSE) © [Huffduff Labs](https://huffduff.net/)

@@ -2,7 +2,6 @@
 
 set -euo pipefail
 
-# TODO: Ensure this is the correct GitHub homepage where releases can be downloaded for tinygo.
 GH_REPO="https://github.com/tinygo-org/tinygo"
 TOOL_NAME="tinygo"
 TOOL_TEST="tinygo version"
@@ -31,8 +30,6 @@ list_github_tags() {
 }
 
 list_all_versions() {
-	# TODO: Adapt this. By default we simply list the tag names from GitHub releases.
-	# Change this function if tinygo has other means of determining installable versions.
 	list_github_tags
 }
 
@@ -41,8 +38,13 @@ download_release() {
 	version="$1"
 	filename="$2"
 
-	# TODO: Adapt the release URL convention for tinygo
-	url="$GH_REPO/archive/v${version}.tar.gz"
+	kernel=$(uname -s | tr '[:upper:]' '[:lower:]')
+	arch=$(uname -m)
+	if [ "$arch" = "x86_64" ]; then
+		arch="amd64"
+	fi
+
+	url="$GH_REPO/releases/download/v${version}/tinygo${version}.${kernel}-${arch}.tar.gz"
 
 	echo "* Downloading $TOOL_NAME release $version..."
 	curl "${curl_opts[@]}" -o "$filename" -C - "$url" || fail "Could not download $url"
@@ -51,17 +53,17 @@ download_release() {
 install_version() {
 	local install_type="$1"
 	local version="$2"
-	local install_path="${3%/bin}/bin"
+	local install_root="${3%/bin}"
+	local install_path="${install_root}/bin"
 
 	if [ "$install_type" != "version" ]; then
 		fail "asdf-$TOOL_NAME supports release installs only"
 	fi
 
 	(
-		mkdir -p "$install_path"
-		cp -r "$ASDF_DOWNLOAD_PATH"/* "$install_path"
+		mkdir -p "$install_root"
+		cp -r "$ASDF_DOWNLOAD_PATH"/* "$install_root/"
 
-		# TODO: Assert tinygo executable exists.
 		local tool_cmd
 		tool_cmd="$(echo "$TOOL_TEST" | cut -d' ' -f1)"
 		test -x "$install_path/$tool_cmd" || fail "Expected $install_path/$tool_cmd to be executable."
